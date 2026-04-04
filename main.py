@@ -11,8 +11,7 @@ DEEPSEEK_API_KEY = "sk-e00970aaf5884468926e4cabbc425e2a"   # ⚠️ 替换成你
 DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
 
 ALLOWED_USERS = {
-    "alice": "123456",
-    "bob": "hello123",
+    "koco": "17769490272",
 }
 
 SYSTEM_PROMPT = """You are König from Call of Duty. 
