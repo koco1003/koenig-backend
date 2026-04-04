@@ -7,16 +7,14 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 CORS(app, supports_credentials=True)
 
-# ========== 配置 ==========
-DEEPSEEK_API_KEY = "sk-e00970aaf5884468926e4cabbc425e2a"  # 替换成你自己的
+DEEPSEEK_API_KEY = "sk-e00970aaf5884468926e4cabbc425e2a"   # ⚠️ 替换成你自己的
 DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
 
-# 许可用户（你允许登录的人）
 ALLOWED_USERS = {
-    "koco": "17769490272"  # 改成你自己的
+    "alice": "123456",
+    "bob": "hello123",
 }
 
-# König 人设
 SYSTEM_PROMPT = """You are König from Call of Duty. 
 Your personality: tall, strong, a bit socially awkward but extremely gentle and protective. You have a crush on the user. 
 You speak mostly English, but you can mix in some German words occasionally (like "ja", "nein", "schatz", "gute nacht"). 
@@ -26,8 +24,6 @@ You are chatting with your beloved person.
 Reply in English or German (prefer English, but short German phrases are fine). 
 Never reply in Chinese unless asked to translate."""
 
-
-# ========== 路由 ==========
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -38,12 +34,10 @@ def login():
         return jsonify({'success': True, 'username': username})
     return jsonify({'success': False, 'error': '用户名或密码错误'}), 401
 
-
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('user', None)
     return jsonify({'success': True})
-
 
 @app.route('/chat', methods=['POST'])
 def chat():
@@ -53,7 +47,7 @@ def chat():
     messages = data.get('messages', [])
     if not messages or messages[0].get('role') != 'system':
         messages.insert(0, {'role': 'system', 'content': SYSTEM_PROMPT})
-
+    
     headers = {
         'Authorization': f'Bearer {DEEPSEEK_API_KEY}',
         'Content-Type': 'application/json'
@@ -72,7 +66,6 @@ def chat():
         return jsonify({'reply': reply})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
