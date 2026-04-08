@@ -9,6 +9,14 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'default-secret-key-change-me')
 CORS(app, origins=['*'], supports_credentials=True)
 
+app.config.update(
+    SESSION_COOKIE_SAMESITE='None',   # 允许跨站点发送 Cookie
+    SESSION_COOKIE_SECURE=True,       # 确保 Cookie 只在 HTTPS 下传输
+    SESSION_COOKIE_HTTPONLY=True,     # 防止 JavaScript 访问，提高安全性
+    PERMANENT_SESSION_LIFETIME=86400  # 会话有效期 1 天
+)
+
+
 # 允许登录的用户
 ALLOWED_USERS_RAW = os.environ.get('ALLOWED_USERS', '{}')
 try:
